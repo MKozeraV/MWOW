@@ -34,9 +34,29 @@ jobs:
           name: .net-app
           path: ${{env.DOTNET_ROOT}}/myapp
 
-  deploy:
+  deploy-dev:
     runs-on: windows-latest
     needs: build
+    environment: 
+      name: 'Dev'
+      url: ${{ steps.deploy-to-azure.outputs.webapp-url }}
+    steps:
+      - name: Download a Build Artifact
+        uses: actions/download-artifact@v3.0.2
+        with: 
+          name: .net-app
+      - name: Azure WebApp
+        id: deploy-to-azure
+        uses: Azure/webapps-deploy@v3.0.0
+        with: 
+          app-name: 'MWOW'
+          slot-name: 'Development'
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+
+  
+  deploy-prod:
+    runs-on: windows-latest
+    needs: deploy-dev
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
@@ -53,5 +73,5 @@ jobs:
         with:
           app-name: 'MWOW'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_B49F1D53752A4CED9BD9285DBD27219D }}
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
           package: .
