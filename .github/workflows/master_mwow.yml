@@ -21,12 +21,6 @@ jobs:
         with:
           dotnet-version: '6.0.x'
           include-prerelease: true
-      - name: Bump build version
-        id: bump
-        uses: vers-one/dotnet-project-version-updater@v1.3
-        with:
-          file: "MWOW/MWOW.csproj"
-          version: bump-minor
 
       - name: Build with dotnet
         run: dotnet build --configuration Release
@@ -42,6 +36,13 @@ jobs:
         with:
           name: .net-app
           path: ${{env.DOTNET_ROOT}}/myapp
+      - name: Bump versions
+        uses: SiqiLu/dotnet-bump-version@2.0.0
+        with:
+          version_files: "**/*.csproj"
+          version_mask: 1.0.0.0
+          version_overwrite: "*.*.*.*"
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 
       
 
