@@ -14,6 +14,13 @@ jobs:
     runs-on: windows-latest
 
     steps:
+      - name: Bump build version
+        id: bump
+        uses: vers-one/dotnet-project-version-updater@v1.3
+        with:
+          file: "MWOW/MWOW.csproj"
+          version: bump-minor
+    
       - uses: actions/checkout@v4
 
       - name: Set up .NET Core
@@ -37,12 +44,8 @@ jobs:
           name: .net-app
           path: ${{env.DOTNET_ROOT}}/myapp
 
-      - name: Bump build version
-        id: bump
-        uses: vers-one/dotnet-project-version-updater@v1.3
-        with:
-          file: "MWOW/MWOW.csproj"
-          version: bump-minor
+      
+
 
   deploy-dev:
     runs-on: windows-latest
