@@ -23,3 +23,5 @@ app.UseAuthorization();
 app.MapRazorPages();
 
 app.Run();
+
+int k=0;
