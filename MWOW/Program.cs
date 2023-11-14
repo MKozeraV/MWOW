@@ -25,4 +25,4 @@ app.MapRazorPages();
 app.Run();
 
 int k=0;
-int błąd
+int błąd=0;
